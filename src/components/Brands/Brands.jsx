@@ -1,27 +1,30 @@
 import React, { useEffect, useState } from "react";
-import Style from "./Brands.module.css";
 import axios from "axios";
 import { ThreeDots } from "react-loader-spinner";
+
 export default function Brands() {
   const [brands, setBrands] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
+
   function getBrands() {
     axios
       .get(`https://ecommerce.routemisr.com/api/v1/brands`)
       .then(({ data }) => {
         setBrands(data.data);
-        // console.log(data.data);
         setIsLoading(false);
       })
       .catch((error) => {
         console.error("Error fetching Brands:", error);
+        setError("Failed to load brands. Please try again later.");
         setIsLoading(false);
       });
   }
+
   useEffect(() => {
     getBrands();
   }, []);
+
   if (isLoading) {
     return (
       <div className="flex justify-center items-center h-screen">
@@ -37,22 +40,25 @@ export default function Brands() {
       </div>
     );
   }
+
   return (
-    <div className="py-5  m-8 p-5 ml-10 px-10  mt-10">
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+    <div className="container mx-auto py-12 px-4 mt-10">
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
         {brands.map((brand) => (
           <div
             key={brand._id}
-            className="text-center bg-white rounded-lg shadow-md p-4 transform transition-transform duration-300 hover:scale-105 hover:shadow-xl hover:translate-y-2"
+            className="bg-white rounded-lg shadow-md p-4 transition-all duration-300 hover:scale-105 hover:shadow-xl"
           >
-            <div className="w-full h-40 overflow-hidden rounded-md">
+            <div className="w-full h-40 flex items-center justify-center overflow-hidden rounded-md">
               <img
-                className="w-full h-full object-contain"
+                className="w-32 h-32 object-contain"
                 src={brand.image}
                 alt={brand.name}
               />
             </div>
-            <h3 className="font-medium text-gray-700 mt-2">{brand.name}</h3>
+            <h3 className="text-lg font-semibold text-gray-700 mt-4 text-center">
+              {brand.name}
+            </h3>
           </div>
         ))}
       </div>
