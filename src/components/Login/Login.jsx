@@ -41,7 +41,7 @@ export default function Login() {
 
   let formik = useFormik({
     initialValues: {
-      email: " ",
+      email: "",
       password: "",
     },
     validationSchema,
@@ -121,10 +121,12 @@ export default function Login() {
             >
               {isLoad ? <FaSpinner /> : "Login"}
             </button>
-            <p className="pl-4">
+            <p className="pl-5">
               didnot have account yet?
               <span className="font-semibold">
-                <Link to={"/register"}>Register Now</Link>
+                <Link to={"/register"} className="p-2">
+                  Register Now
+                </Link>
               </span>
             </p>
           </div>

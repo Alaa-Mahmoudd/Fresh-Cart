@@ -52,14 +52,12 @@ export default function Category() {
         </p>
       </div>
 
-      {/* Grid Container */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
         {categories.map((category) => (
           <div
-            key={category.id}
+            key={category._id}
             className="text-center bg-white rounded-lg shadow-md p-4 transform transition-transform duration-300 hover:scale-105 hover:shadow-xl hover:translate-y-2"
           >
-            {/* Image Box */}
             <div className="w-full h-40 overflow-hidden rounded-md">
               <img
                 className="w-full h-full object-contain"

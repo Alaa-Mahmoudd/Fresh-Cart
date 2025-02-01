@@ -24,7 +24,7 @@ export default function RecentProducts() {
     return axios.get(`https://ecommerce.routemisr.com/api/v1/products`);
   }
 
-  let { data, isError, error, isLoading } = useQuery({
+  const { data, isError, error, isLoading } = useQuery({
     queryKey: ["recentProducts"],
     queryFn: getRecentProducts,
     staleTime: 80000,
@@ -67,38 +67,34 @@ export default function RecentProducts() {
         />
       </div>
 
-      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6 p-4">
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6 p-5 mt-10">
         {filteredProducts?.map((product) => (
           <div
             key={product.id}
-            className="relative group bg-white rounded-lg shadow-lg overflow-hidden"
+            className="group bg-white rounded-lg shadow-md overflow-hidden transform transition-transform duration-300 hover:scale-105"
           >
-            <div className="absolute inset-0 bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition duration-300 flex justify-center items-center space-x-4">
-              <FaHeart
-                className="text-white text-2xl cursor-pointer hover:text-green-500 transition"
-                onClick={() => addToWishList(product.id)}
-              />
-              <FaShoppingCart
-                className="text-white text-2xl cursor-pointer hover:text-green-500 transition"
-                onClick={() => addProductToCart(product.id)}
-              />
-            </div>
-
             <Link to={`/productdetails/${product.id}/${product.category.name}`}>
-              <img
-                className="w-full object-cover"
-                src={product.imageCover}
-                alt={product.title}
-              />
+              <div>
+                <div className="relative">
+                  <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-20 transition-opacity duration-300 pointer-events-none"></div>
+                  <img
+                    className="w-full object-cover"
+                    src={product.imageCover}
+                    alt={product.title}
+                  />
+                </div>
+              </div>
               <div className="p-4">
                 <span className="block font-light text-green-600">
                   {product.category.name}
                 </span>
-                <h3 className="text-lg font-normal text-gray-800 truncate">
-                  {product.title}
+                <h3 className="text-lg font-medium text-gray-800 mt-1">
+                  {product.title.split(" ").slice(0, 2).join(" ")}
                 </h3>
                 <div className="flex justify-between items-center mt-2">
-                  <span className="font-semibold">{product.price} EGP</span>
+                  <span className="font-bold text-gray-800">
+                    {product.price} EGP
+                  </span>
                   <span className="flex items-center">
                     {product.ratingsAverage}{" "}
                     <FaStar className="text-yellow-500 ml-1" />
@@ -106,6 +102,31 @@ export default function RecentProducts() {
                 </div>
               </div>
             </Link>
+
+            <div
+              className="flex justify-around border-t p-4 
+              opacity-0 group-hover:opacity-100 transition-all duration-300 
+              transform translate-y-2 group-hover:translate-y-0"
+            >
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  addToWishList(product.id);
+                }}
+                className="text-gray-600 hover:text-green-500 transition-colors"
+              >
+                <FaHeart className="text-2xl" />
+              </button>
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  addProductToCart(product.id);
+                }}
+                className="text-gray-600 hover:text-green-500 transition-colors"
+              >
+                <FaShoppingCart className="text-2xl" />
+              </button>
+            </div>
           </div>
         ))}
       </div>

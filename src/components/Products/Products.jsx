@@ -5,9 +5,10 @@ import { ThreeDots } from "react-loader-spinner";
 import useProducts from "../../Hooks/useProducts";
 import { CartContext } from "../../Context/CartContext";
 import { WishListContext } from "../../Context/WishListContext";
+
 export default function Products() {
-  let { addToCart } = useContext(CartContext);
-  let { wishList } = useContext(WishListContext);
+  const { addToCart } = useContext(CartContext);
+  const { wishList } = useContext(WishListContext);
 
   async function addToWishList(productId) {
     await wishList(productId);
@@ -17,7 +18,7 @@ export default function Products() {
     await addToCart(productId);
   }
 
-  let { data, isError, error, isLoading } = useProducts();
+  const { data, isError, error, isLoading } = useProducts();
 
   if (isError) {
     return (
@@ -36,51 +37,66 @@ export default function Products() {
   }
 
   return (
-    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6 p-5 mt-10">
+    <div className=" grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6 p-5 mt-10">
       {data?.data.data.map((product) => {
         return (
           <div
             key={product.id}
-            className="relative bg-white rounded-lg shadow-md overflow-hidden transform transition-transform duration-300 hover:scale-105"
+            className="group bg-white rounded-lg shadow-md overflow-hidden transform transition-transform duration-300 hover:scale-105"
           >
             <Link to={`/productdetails/${product.id}/${product.category.name}`}>
-              <img
-                className="w-full object-cover"
-                src={product.imageCover}
-                alt={product.title}
-              />
+              <div>
+                <div className="relative">
+                  <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-20 transition-opacity duration-300 pointer-events-none"></div>
+                  <img
+                    className="w-full object-cover"
+                    src={product.imageCover}
+                    alt={product.title}
+                  />
+                </div>
+                <div className="p-4">
+                  <span className="block font-light text-green-600">
+                    {product.category.name}
+                  </span>
+                  <h3 className="text-lg font-medium text-gray-800 mt-1">
+                    {product.title.split(" ").slice(0, 2).join(" ")}
+                  </h3>
+                  <div className="flex justify-between items-center mt-2">
+                    <span className="font-bold text-gray-800">
+                      {product.price} EGP
+                    </span>
+                    <span className="flex items-center">
+                      {product.ratingsAverage}{" "}
+                      <FaStar className="text-yellow-500 ml-1" />
+                    </span>
+                  </div>
+                </div>
+              </div>
             </Link>
 
-            <div className="p-4">
-              <span className="block font-light text-green-600">
-                {product.category.name}
-              </span>
-              <h3 className="text-lg font-medium text-gray-800 mt-1">
-                {product.title.split(" ").slice(0, 2).join(" ")}
-              </h3>
-              <div className="flex justify-between items-center mt-2">
-                <span className="font-bold text-gray-800">
-                  {product.price} EGP
-                </span>
-                <span className="flex items-center">
-                  {product.ratingsAverage}{" "}
-                  <FaStar className="text-yellow-500 ml-1" />
-                </span>
-              </div>
-            </div>
-
-            <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center opacity-0 transition-opacity duration-300 hover:opacity-100">
-              <div className="flex gap-4">
-                <FaHeart
-                  className="text-white text-2xl cursor-pointer hover:text-green-500 transition-colors"
-                  onClick={() => addToWishList(product.id)}
-                />
-
-                <FaShoppingCart
-                  className="text-white text-2xl cursor-pointer hover:text-green-500 transition-colors"
-                  onClick={() => addProductToCart(product.id)}
-                />
-              </div>
+            <div
+              className="flex justify-around border-t p-4 
+              opacity-0 group-hover:opacity-100 transition-all duration-300 
+              transform translate-y-2 group-hover:translate-y-0"
+            >
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  addToWishList(product.id);
+                }}
+                className="text-gray-600 hover:text-green-500 transition-colors"
+              >
+                <FaHeart className="text-2xl" />
+              </button>
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  addProductToCart(product.id);
+                }}
+                className="text-gray-600 hover:text-green-500 transition-colors"
+              >
+                <FaShoppingCart className="text-2xl" />
+              </button>
             </div>
           </div>
         );

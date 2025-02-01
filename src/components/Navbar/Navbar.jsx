@@ -1,6 +1,7 @@
 import React, { useContext } from "react";
 import logo from "../../assets/images/freshcart-logo.svg";
 import { NavLink, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import {
   FaFacebook,
   FaTwitter,
@@ -30,7 +31,9 @@ export default function Navbar() {
     <nav className="fixed bg-gray-100 top-0 left-0 right-0 z-50 shadow-md">
       <div className="container mx-auto py-4 flex justify-between items-center">
         <div className="flex items-center">
-          <img src={logo} width={120} alt="fresh cart logo" />
+          <Link to={"/"}>
+            <img src={logo} width={120} alt="fresh cart" />
+          </Link>
         </div>
 
         <div className="flex items-center space-x-4">
